@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("me.zheteng.android.meituvideosaver", appContext.getPackageName());
+        assertEquals("me.zheteng.android.videosaver", appContext.getPackageName());
     }
 }

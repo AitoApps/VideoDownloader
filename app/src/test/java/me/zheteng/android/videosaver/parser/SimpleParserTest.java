@@ -1,12 +1,12 @@
-package me.zheteng.android.videosaver.saver;
+package me.zheteng.android.videosaver.parser;
 
 import static org.junit.Assert.assertTrue;
 
 import android.text.TextUtils;
-import me.zheteng.android.videosaver.saver.extractor.MetaVideoExtractor;
-import me.zheteng.android.videosaver.saver.extractor.MiaopaiExtractor;
-import me.zheteng.android.videosaver.saver.provider.MeipaiUrlProvider;
-import me.zheteng.android.videosaver.saver.provider.OriginalUrlProvider;
+import me.zheteng.android.videosaver.parser.extractor.MetaVideoExtractor;
+import me.zheteng.android.videosaver.parser.extractor.MiaopaiExtractor;
+import me.zheteng.android.videosaver.parser.provider.MeipaiUrlProvider;
+import me.zheteng.android.videosaver.parser.provider.OriginalUrlProvider;
 
 import java.util.ArrayList;
 import java.util.List;

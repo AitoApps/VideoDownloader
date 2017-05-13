@@ -1,8 +1,8 @@
-package me.zheteng.android.videosaver.saver.extractor;
+package me.zheteng.android.videosaver.parser.extractor;
 
 import android.support.annotation.Nullable;
-import me.zheteng.android.videosaver.saver.Extractor;
-import me.zheteng.android.videosaver.saver.ParserUtils;
+import me.zheteng.android.videosaver.parser.Extractor;
+import me.zheteng.android.videosaver.parser.ParserUtils;
 
 import java.util.HashMap;
 import java.util.Map;

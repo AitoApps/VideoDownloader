@@ -1,6 +1,6 @@
-package me.zheteng.android.videosaver.saver.extractor;
+package me.zheteng.android.videosaver.parser.extractor;
 
-import me.zheteng.android.videosaver.saver.Extractor;
+import me.zheteng.android.videosaver.parser.Extractor;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,6 +1,8 @@
-package me.zheteng.android.videosaver.saver;
+package me.zheteng.android.videosaver.saver.extractor;
 
 import android.support.annotation.Nullable;
+import me.zheteng.android.videosaver.saver.Extractor;
+import me.zheteng.android.videosaver.saver.ParserUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,9 +28,21 @@ public class MetaVideoExtractor implements Extractor {
             }
         }
 
+        String videoUrl = findVideoUrl(hits, "og:video:url");
+        if (ParserUtils.isEmpty(videoUrl)) {
+            videoUrl = findVideoUrl(hits, "og:video");
+        }
+        if (ParserUtils.isEmpty(videoUrl)) {
+            videoUrl = findVideoUrl(hits, "og:video:secure_url");
+        }
+        return videoUrl;
+    }
+
+    @Nullable
+    private String findVideoUrl(Map<String, String> hits, String key) {
         String videoUrl = null;
         for (Map.Entry<String, String> entry : hits.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase("og:video:url")) {
+            if (entry.getKey().equalsIgnoreCase(key)) {
                 videoUrl = entry.getValue();
                 break;
             }

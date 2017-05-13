@@ -3,6 +3,10 @@ package me.zheteng.android.videosaver.saver;
 import static org.junit.Assert.assertTrue;
 
 import android.text.TextUtils;
+import me.zheteng.android.videosaver.saver.extractor.MetaVideoExtractor;
+import me.zheteng.android.videosaver.saver.extractor.MiaopaiExtractor;
+import me.zheteng.android.videosaver.saver.provider.MeipaiUrlProvider;
+import me.zheteng.android.videosaver.saver.provider.OriginalUrlProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,20 +91,66 @@ public class SimpleParserTest {
         urls.add("https://www.kuaishou.com/photo/425780666/2117347223");
         final CountDownLatch signal = new CountDownLatch(urls.size());
         for (String url : urls) {
-            UrlProvider provider = new KuaishouUrlProvider(url);
+            UrlProvider provider = new OriginalUrlProvider(url);
             Extractor extractor = new MetaVideoExtractor();
             request(provider, extractor, true, signal);
         }
         signal.await();
     }
 
+
     @Test
     public void parse_KuaishouInValid() throws Exception {
         final CountDownLatch signal = new CountDownLatch(1);
         String url = "https://www.kuaishou.com/photo/";
-        UrlProvider provider = new KuaishouUrlProvider(url);
+        UrlProvider provider = new OriginalUrlProvider(url);
         Extractor extractor = new MetaVideoExtractor();
         request(provider, extractor, false, signal);
+        signal.await();
+    }
+
+    @Test
+    public void parse_MiaopaiValid() throws Exception {
+        List<String> urls = new ArrayList<>();
+        urls.add("http://www.miaopai.com/show/0Wrff8C97TTK3eQRPmRWbrkFLA3oCPJi.htm");
+        urls.add("http://www.miaopai.com/show/u5lcuztXXyBKwVBLSzVGRoiiWFV1RGaT.htm");
+        urls.add("http://www.miaopai.com/show/GTy8b5AzIsO~rLzBgiCVtAXdVF8T647M.htm");
+        urls.add("http://www.miaopai.com/show/Aq5aTZMXkFJ6rmdCLPlUHApj8pV8d8KF.htm");
+        urls.add("http://www.miaopai.com/show/~OP~aVTpBxY3mKLF7oWVOKe5odfX19Et.htm");
+        final CountDownLatch signal = new CountDownLatch(urls.size());
+        for (String url : urls) {
+            UrlProvider provider = new OriginalUrlProvider(url);
+            Extractor extractor = new MiaopaiExtractor();
+            request(provider, extractor, true, signal);
+        }
+        signal.await();
+    }
+
+
+    @Test
+    public void parse_MiaopaiInValid() throws Exception {
+        final CountDownLatch signal = new CountDownLatch(1);
+        String url = "http://www.miaopai.com/show/xxx.htm";
+        UrlProvider provider = new OriginalUrlProvider(url);
+        Extractor extractor = new MiaopaiExtractor();
+        request(provider, extractor, false, signal);
+        signal.await();
+    }
+
+    @Test
+    public void parse_InstagramValid() throws Exception {
+        List<String> urls = new ArrayList<>();
+        urls.add("https://www.instagram.com/p/BUADWTyFxKz/");
+        urls.add("https://www.instagram.com/p/BT9aWr1lfYe/");
+        urls.add("https://www.instagram.com/p/BTmEtfUAUYC/");
+        urls.add("https://www.instagram.com/p/BUA1e_bFSJa/");
+        urls.add("https://www.instagram.com/p/BUA0td5l0P8/");
+        final CountDownLatch signal = new CountDownLatch(urls.size());
+        for (String url : urls) {
+            UrlProvider provider = new OriginalUrlProvider(url);
+            Extractor extractor = new MetaVideoExtractor();
+            request(provider, extractor, true, signal);
+        }
         signal.await();
     }
 }

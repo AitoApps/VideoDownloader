@@ -1,4 +1,6 @@
-package me.zheteng.android.videosaver.saver;
+package me.zheteng.android.videosaver.saver.provider;
+
+import me.zheteng.android.videosaver.saver.UrlProvider;
 
 /**
  * 美拍URL拼接

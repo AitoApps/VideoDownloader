@@ -1,7 +1,6 @@
 package me.zheteng.android.videosaver.saver;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -62,26 +61,11 @@ public class VideoParser implements Callback {
         String videoUrl = mExtractor.extract(string);
 
         if (mCallback != null) {
-            if (!isEmpty(videoUrl)) {
+            if (!ParserUtils.isEmpty(videoUrl)) {
                 mCallback.onParsed(this, videoUrl);
             } else {
                 mCallback.onFailure(this, new NoVideoFoundException());
             }
-        }
-    }
-
-    /**
-     * Returns true if the string is null or 0-length.
-     *
-     * @param str the string to be examined
-     *
-     * @return true if str is null or zero length
-     */
-    public static boolean isEmpty(@Nullable CharSequence str) {
-        if (str == null || str.length() == 0) {
-            return true;
-        } else {
-            return false;
         }
     }
 

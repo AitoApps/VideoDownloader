@@ -28,10 +28,10 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 public class SimpleParserTest {
 
     /**
-     *
      * @param valid 是否测试的是可用地址，如果不是说明正确结果应该是走解析错误
      */
-    private void request(final UrlProvider provider, Extractor extractor, final boolean valid, final CountDownLatch signal) {
+    private void request(final UrlProvider provider, Extractor extractor, final boolean valid,
+                         final CountDownLatch signal) {
         VideoParser parser = VideoParser.create(provider, extractor);
         if (provider instanceof VimeoProvider) {
             parser.addRequestInterceptor(new VimeoInterceptor(((VimeoProvider) provider).getId()));
@@ -41,7 +41,8 @@ public class SimpleParserTest {
             public void onParsed(VideoParser parser, List<Video> videos) {
                 signal.countDown();
                 String result = valid ? "passed" : "failed";
-                System.out.println("Test " + result + ": " + provider.getClass().getSimpleName() + ",url: "+ videos.get(0).url);
+                System.out.println(
+                        "Test " + result + ": " + provider.getClass().getSimpleName() + ",url: " + videos.get(0).url);
                 assertTrue("Parse success", valid);
             }
 
@@ -56,6 +57,7 @@ public class SimpleParserTest {
         parser.startParse();
     }
 
+    /// ---------- 有效地址的测试 --------------
     @Test
     public void parse_MeipaiValidId() throws Exception {
         List<String> ids = new ArrayList<>();
@@ -80,17 +82,6 @@ public class SimpleParserTest {
     }
 
     @Test
-    public void parse_MeipaiInvalidId() throws Exception{
-        final CountDownLatch signal = new CountDownLatch(1);
-
-        final String id = "sdfsdfsdf";
-        UrlProvider provider = new MeipaiUrlProvider(id);
-        Extractor extractor = new MetaVideoExtractor();
-        request(provider, extractor, false, signal);
-        signal.await();
-    }
-
-    @Test
     public void parse_KuaishouValid() throws Exception {
         List<String> urls = new ArrayList<>();
         urls.add("https://www.kuaishou.com/photo/425780666/2157280381");
@@ -102,17 +93,6 @@ public class SimpleParserTest {
             Extractor extractor = new MetaVideoExtractor();
             request(provider, extractor, true, signal);
         }
-        signal.await();
-    }
-
-
-    @Test
-    public void parse_KuaishouInValid() throws Exception {
-        final CountDownLatch signal = new CountDownLatch(1);
-        String url = "https://www.kuaishou.com/photo/";
-        UrlProvider provider = new OriginalUrlProvider(url);
-        Extractor extractor = new MetaVideoExtractor();
-        request(provider, extractor, false, signal);
         signal.await();
     }
 
@@ -130,17 +110,6 @@ public class SimpleParserTest {
             Extractor extractor = new MiaopaiExtractor();
             request(provider, extractor, true, signal);
         }
-        signal.await();
-    }
-
-
-    @Test
-    public void parse_MiaopaiInValid() throws Exception {
-        final CountDownLatch signal = new CountDownLatch(1);
-        String url = "http://www.miaopai.com/show/xxx.htm";
-        UrlProvider provider = new OriginalUrlProvider(url);
-        Extractor extractor = new MiaopaiExtractor();
-        request(provider, extractor, false, signal);
         signal.await();
     }
 
@@ -184,6 +153,38 @@ public class SimpleParserTest {
             Extractor extractor = new VimeoExtractor();
             request(provider, extractor, true, signal);
         }
+        signal.await();
+    }
+
+    /// ----------- 无效地址的测试 ------------
+    @Test
+    public void parse_KuaishouInValid() throws Exception {
+        final CountDownLatch signal = new CountDownLatch(1);
+        String url = "https://www.kuaishou.com/photo/";
+        UrlProvider provider = new OriginalUrlProvider(url);
+        Extractor extractor = new MetaVideoExtractor();
+        request(provider, extractor, false, signal);
+        signal.await();
+    }
+
+    @Test
+    public void parse_MeipaiInvalidId() throws Exception {
+        final CountDownLatch signal = new CountDownLatch(1);
+
+        final String id = "sdfsdfsdf";
+        UrlProvider provider = new MeipaiUrlProvider(id);
+        Extractor extractor = new MetaVideoExtractor();
+        request(provider, extractor, false, signal);
+        signal.await();
+    }
+
+    @Test
+    public void parse_MiaopaiInValid() throws Exception {
+        final CountDownLatch signal = new CountDownLatch(1);
+        String url = "http://www.miaopai.com/show/xxx.htm";
+        UrlProvider provider = new OriginalUrlProvider(url);
+        Extractor extractor = new MiaopaiExtractor();
+        request(provider, extractor, false, signal);
         signal.await();
     }
 }

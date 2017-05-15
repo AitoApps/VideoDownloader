@@ -9,6 +9,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class VideoParser implements Callback {
     private ParseCallback mCallback;
     private UrlProvider mUrlProvider;
     private Extractor mExtractor;
+    private List<RequestInterceptor> mRequestInterceptors;
 
     /**
      * 创建一个解析
@@ -39,6 +41,15 @@ public class VideoParser implements Callback {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
         mClient = builder.build();
+        mRequestInterceptors = new ArrayList<>();
+    }
+
+    public void addRequestInterceptor(RequestInterceptor requestInterceptor) {
+        mRequestInterceptors.add(requestInterceptor);
+    }
+
+    public void removeRequestInterceptor(RequestInterceptor requestInterceptor) {
+        mRequestInterceptors.remove(requestInterceptor);
     }
 
     public ParseCallback getCallback() {
@@ -86,10 +97,14 @@ public class VideoParser implements Callback {
         String url = mUrlProvider.getTargetUrl();
 
         Request.Builder builder = new Request.Builder();
-        return builder.url(url)
+        builder = builder.url(url)
                 .get()
                 .header("User-Agent", "facebookexternalhit/1.1")
-                .cacheControl(CacheControl.FORCE_NETWORK)
-                .build();
+                .cacheControl(CacheControl.FORCE_NETWORK);
+        for (RequestInterceptor interceptor : mRequestInterceptors) {
+            builder = interceptor.intercept(builder);
+        }
+
+        return builder.build();
     }
 }

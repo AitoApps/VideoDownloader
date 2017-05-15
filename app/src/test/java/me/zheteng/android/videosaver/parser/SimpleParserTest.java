@@ -5,9 +5,12 @@ import static org.junit.Assert.assertTrue;
 import android.text.TextUtils;
 import me.zheteng.android.videosaver.parser.extractor.MetaVideoExtractor;
 import me.zheteng.android.videosaver.parser.extractor.MiaopaiExtractor;
+import me.zheteng.android.videosaver.parser.extractor.VimeoExtractor;
 import me.zheteng.android.videosaver.parser.extractor.YoutubeExtractor;
+import me.zheteng.android.videosaver.parser.interceptor.VimeoInterceptor;
 import me.zheteng.android.videosaver.parser.provider.MeipaiUrlProvider;
 import me.zheteng.android.videosaver.parser.provider.OriginalUrlProvider;
+import me.zheteng.android.videosaver.parser.provider.VimeoProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,9 @@ public class SimpleParserTest {
      */
     private void request(final UrlProvider provider, Extractor extractor, final boolean valid, final CountDownLatch signal) {
         VideoParser parser = VideoParser.create(provider, extractor);
+        if (provider instanceof VimeoProvider) {
+            parser.addRequestInterceptor(new VimeoInterceptor(((VimeoProvider) provider).getId()));
+        }
         parser.setCallback(new ParseCallback() {
             @Override
             public void onParsed(VideoParser parser, List<Video> videos) {
@@ -163,6 +169,19 @@ public class SimpleParserTest {
         for (String url : urls) {
             UrlProvider provider = new OriginalUrlProvider(url);
             Extractor extractor = new YoutubeExtractor();
+            request(provider, extractor, true, signal);
+        }
+        signal.await();
+    }
+
+    @Test
+    public void parse_VimeoValid() throws Exception {
+        List<String> ids = new ArrayList<>();
+        ids.add("216850854");
+        final CountDownLatch signal = new CountDownLatch(ids.size());
+        for (String vid : ids) {
+            UrlProvider provider = new VimeoProvider(vid);
+            Extractor extractor = new VimeoExtractor();
             request(provider, extractor, true, signal);
         }
         signal.await();

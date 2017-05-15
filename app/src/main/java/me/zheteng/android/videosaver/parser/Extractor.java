@@ -1,5 +1,9 @@
 package me.zheteng.android.videosaver.parser;
 
+import android.support.annotation.NonNull;
+
+import java.util.List;
+
 /**
  * 从HTML里抽取需要的信息
  */
@@ -10,5 +14,6 @@ public interface Extractor {
      * @param html 被抽取的HTML字符串
      * @return 抽取出来的信息
      */
-    String extract(String html);
+    @NonNull
+    List<Video> extract(String html);
 }

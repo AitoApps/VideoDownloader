@@ -3,10 +3,10 @@ package me.zheteng.android.videosaver.parser.provider;
 import me.zheteng.android.videosaver.parser.UrlProvider;
 
 /**
- * 快手地址
+ * 只是存储原始地址
  */
 public class OriginalUrlProvider implements UrlProvider {
-    String mTargetUrl;
+    private String mTargetUrl;
 
     public OriginalUrlProvider(String original) {
         mTargetUrl = original;

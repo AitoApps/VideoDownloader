@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import android.text.TextUtils;
 import me.zheteng.android.videosaver.parser.extractor.MetaVideoExtractor;
 import me.zheteng.android.videosaver.parser.extractor.MiaopaiExtractor;
+import me.zheteng.android.videosaver.parser.extractor.YoutubeExtractor;
 import me.zheteng.android.videosaver.parser.provider.MeipaiUrlProvider;
 import me.zheteng.android.videosaver.parser.provider.OriginalUrlProvider;
 
@@ -31,11 +32,11 @@ public class SimpleParserTest {
         VideoParser parser = VideoParser.create(provider, extractor);
         parser.setCallback(new ParseCallback() {
             @Override
-            public void onParsed(VideoParser parser, String videoUrl) {
+            public void onParsed(VideoParser parser, List<Video> videos) {
                 signal.countDown();
                 String result = valid ? "passed" : "failed";
-                System.out.println("Test " + result + ": " + provider.getClass().getSimpleName() + ",url: "+ videoUrl);
-                assertTrue(videoUrl, valid);
+                System.out.println("Test " + result + ": " + provider.getClass().getSimpleName() + ",url: "+ videos.get(0).url);
+                assertTrue("Parse success", valid);
             }
 
             @Override
@@ -149,6 +150,19 @@ public class SimpleParserTest {
         for (String url : urls) {
             UrlProvider provider = new OriginalUrlProvider(url);
             Extractor extractor = new MetaVideoExtractor();
+            request(provider, extractor, true, signal);
+        }
+        signal.await();
+    }
+
+    @Test
+    public void parse_YoutubeValid() throws Exception {
+        List<String> urls = new ArrayList<>();
+        urls.add("https://www.youtube.com/watch?v=5Bec0w3FU4s");
+        final CountDownLatch signal = new CountDownLatch(urls.size());
+        for (String url : urls) {
+            UrlProvider provider = new OriginalUrlProvider(url);
+            Extractor extractor = new YoutubeExtractor();
             request(provider, extractor, true, signal);
         }
         signal.await();

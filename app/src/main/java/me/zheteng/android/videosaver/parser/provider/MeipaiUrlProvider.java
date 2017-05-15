@@ -6,7 +6,7 @@ import me.zheteng.android.videosaver.parser.UrlProvider;
  * 美拍URL拼接
  */
 public class MeipaiUrlProvider implements UrlProvider {
-    public static final String BASE_URL = "http://www.meipai.com/media/";
+    private static final String BASE_URL = "http://www.meipai.com/media/";
     private final String mId;
 
     public MeipaiUrlProvider(String id) {

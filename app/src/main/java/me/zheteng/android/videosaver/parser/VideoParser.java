@@ -9,6 +9,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 解析器框架代码
@@ -58,11 +59,11 @@ public class VideoParser implements Callback {
     @Override
     public void onResponse(Call call, Response response) throws IOException {
         String string = response.body().string();
-        String videoUrl = mExtractor.extract(string);
+        List<Video> list = mExtractor.extract(string);
 
         if (mCallback != null) {
-            if (!ParserUtils.isEmpty(videoUrl)) {
-                mCallback.onParsed(this, videoUrl);
+            if (list.size() > 0) {
+                mCallback.onParsed(this, list);
             } else {
                 mCallback.onFailure(this, new NoVideoFoundException());
             }

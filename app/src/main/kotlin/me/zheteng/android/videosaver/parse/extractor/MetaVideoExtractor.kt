@@ -1,4 +1,3 @@
-
 package me.zheteng.android.videosaver.parse.extractor
 
 import me.zheteng.android.videosaver.parse.Extractor
@@ -13,7 +12,8 @@ import java.util.regex.Pattern
  */
 class MetaVideoExtractor : Extractor {
     override fun extract(html: String): List<Video> {
-        val pattern = Pattern.compile("<meta([^>]+property=\"([^\"]*)\"[^>]+content=\"([^\"]*)\"|" + "[^>]+content=\"([^\"]*)\"[^>]+property=\"([^\"]*)\")[^>]*>",
+        val pattern = Pattern.compile("<meta([^>]+property=\"([^\"]*)\"[^>]+content=\"([^\"]*)\"|"
+                + "[^>]+content=\"([^\"]*)\"[^>]+property=\"([^\"]*)\")[^>]*>",
                 Pattern.CASE_INSENSITIVE)
         val matcher = pattern.matcher(html)
         val hits = HashMap<String, String>()
